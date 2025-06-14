@@ -100,4 +100,17 @@ exports.updateProfile = async (req, res) => {
     console.error('[updateProfile]', error);
     res.status(500).json({ error: 'Błąd serwera', details: error.message });
   }
+};
+
+// GET wszyscy użytkownicy, admin only
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] }
+    });
+    res.json(users);
+  } catch (error) {
+    console.error('[getAllUsers]', error);
+    res.status(500).json({ error: 'Błąd serwera', details: error.message });
+  }
 }; 

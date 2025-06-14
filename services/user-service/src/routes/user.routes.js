@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
-const { verifyToken } = require('../middleware/auth.middleware');
+const { verifyToken, requireRole } = require('../middleware/auth.middleware');
+const validate = require('../middleware/validation.middleware');
+const { registerSchema, loginSchema, updateProfileSchema } = require('../validation/user.validation');
 
 // Endpointy publiczne
-router.post('/register', userController.register);
-router.post('/login', userController.login);
+router.post('/register', validate(registerSchema), userController.register);
+router.post('/login', validate(loginSchema), userController.login);
 
 // Endpointy chronione
 router.get('/profile', verifyToken, userController.getProfile);
-router.put('/profile', verifyToken, userController.updateProfile);
+router.put('/profile', verifyToken, validate(updateProfileSchema), userController.updateProfile);
+
+// Endpointy administratora
+router.get('/', verifyToken, requireRole(['administrator']), userController.getAllUsers);
 
 module.exports = router; 
