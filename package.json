@@ -1,0 +1,28 @@
+{
+  "name": "study-smart",
+  "version": "1.0.0",
+  "description": "System edukacyjny - Projekt Bazy Danych II",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "dotenv": "^16.5.0",
+    "helmet": "^7.2.0",
+    "express-rate-limit": "^7.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "joi": "^17.13.3",
+    "pg": "^8.16.0",
+    "sequelize": "^6.37.7",
+    "mongoose": "^8.15.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.56.0",
+    "nodemon": "^3.1.10"
+  }
+} 
