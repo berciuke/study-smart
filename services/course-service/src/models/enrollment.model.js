@@ -1,28 +1,32 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
+const enrollmentUserIdField = {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    };
+
+const enrollmentCourseIdField = {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Courses',
+        key: 'id'
+      }
+    };
+
 const Enrollment = sequelize.define('Enrollment', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Users',
-      key: 'id'
-    }
-  },
-  courseId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Courses',
-      key: 'id'
-    }
-  },
+  userId: enrollmentUserIdField,
+  courseId: enrollmentCourseIdField,
   enrolledAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW

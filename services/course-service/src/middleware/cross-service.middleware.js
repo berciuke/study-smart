@@ -19,12 +19,17 @@ const validateUser = async (req, res, next) => {
 const requireInstructor = async (req, res, next) => {
   try {
     const token = req.header('Authorization');
+    if (!token) {
+      return res.status(401).json({ error: 'Brak tokenu autoryzacji' });
+    }
+    
     const user = await userService.validateInstructor(token);
     req.user = user;
     next();
   } catch (error) {
     console.error('[requireInstructor]', error);
-    res.status(403).json({ error: 'Brak uprawnień instruktora' });
+    const statusCode = error.message.includes('uprawnień') ? 403 : 401;
+    res.status(statusCode).json({ error: error.message || 'Brak uprawnień instruktora' });
   }
 };
 

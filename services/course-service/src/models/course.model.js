@@ -1,6 +1,20 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
+const courseInstructorIdField = process.env.NODE_ENV === 'test' 
+  ? {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
+  : {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users', 
+        key: 'id'
+      }
+    };
+
 const Course = sequelize.define('Course', {
   id: {
     type: DataTypes.INTEGER,
@@ -38,14 +52,7 @@ const Course = sequelize.define('Course', {
     type: DataTypes.BOOLEAN,
     defaultValue: true
   },
-  instructorId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Users', 
-      key: 'id'
-    }
-  } 
+  instructorId: courseInstructorIdField
 }, {
   indexes: [
     { fields: ['instructorId'] }, 
