@@ -1,0 +1,32 @@
+{
+  "name": "progress-service",
+  "version": "1.0.0",
+  "description": "Progress Service - Study Smart",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "NODE_ENV=test jest"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "dotenv": "^16.5.0",
+    "helmet": "^7.2.0",
+    "express-rate-limit": "^7.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "joi": "^17.13.3",
+    "cors": "^2.8.5",
+    "axios": "^1.7.7",
+    
+    "mongoose": "^8.8.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "nodemon": "^3.1.10"
+  },
+  "jest": {
+    "setupFilesAfterEnv": ["./src/tests/setup.js"],
+    "testEnvironment": "node"
+  }
+} 
