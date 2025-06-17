@@ -3,6 +3,7 @@ const Enrollment = require('./enrollment.model');
 const Quiz = require('./quiz.model');
 const Question = require('./question.model');
 const QuizSubmission = require('./quiz-submission.model');
+const Resource = require('./resource.model');
 
 // Course -> Enrollment relations
 Course.hasMany(Enrollment, { 
@@ -52,10 +53,22 @@ QuizSubmission.belongsTo(Quiz, {
   as: 'quiz'
 });
 
+// Resource relationships
+Course.hasMany(Resource, { 
+  foreignKey: 'courseId', 
+  as: 'resources',
+  onDelete: 'CASCADE'
+});
+Resource.belongsTo(Course, { 
+  foreignKey: 'courseId', 
+  as: 'course' 
+});
+
 module.exports = {
   Course,
   Enrollment,
   Quiz,
   Question,
-  QuizSubmission
+  QuizSubmission,
+  Resource
 }; 

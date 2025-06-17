@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const { testConnection, sequelize } = require('./config/db');
 const courseRoutes = require('./routes/course.routes');
+const resourceRoutes = require('./routes/resource.routes');
 
 // Import all models to ensure proper initialization
 require('./models');
@@ -24,6 +25,7 @@ app.use(limiter);
 
 // Podpięcie tras 
 app.use('/api/courses', courseRoutes);
+app.use('/api', resourceRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
