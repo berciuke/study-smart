@@ -1,0 +1,70 @@
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: pg
+      POSTGRES_PASSWORD: pg
+      POSTGRES_DB: study_smart
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  user-service:
+    build: ./services/user-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=development
+      - USER_SERVICE_PORT=3001
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=pg
+      - POSTGRES_PASSWORD=pg
+      - POSTGRES_DB=study_smart
+      - JWT_SECRET=najlepiej_dlugi_i_losowy
+
+  course-service:
+    build: ./services/course-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+      - user-service
+    environment:
+      - NODE_ENV=development
+      - COURSE_SERVICE_PORT=3002
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=pg
+      - POSTGRES_PASSWORD=pg
+      - POSTGRES_DB=study_smart
+      - USER_SERVICE_URL=http://user-service:3001
+      - JWT_SECRET=najlepiej_dlugi_i_losowy
+
+  progress-service:
+    build: ./services/progress-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mongodb
+      - user-service
+      - course-service
+    environment:
+      - NODE_ENV=development
+      - PROGRESS_SERVICE_PORT=3003
+      - MONGODB_URI=mongodb://mongodb:27017/study_smart
+      - USER_SERVICE_URL=http://user-service:3001
+      - COURSE_SERVICE_URL=http://course-service:3002
+      - JWT_SECRET=najlepiej_dlugi_i_losowy
+
+volumes:
+  postgres_data:
+  mongodb_data: 
