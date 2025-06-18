@@ -10,16 +10,18 @@ const QuizSubmission = sequelize.define('QuizSubmission', {
   quizId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'quiz_id',
     references: {
-      model: 'Quizzes',
+      model: 'quizzes',
       key: 'id'
     }
   },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'user_id',
     references: {
-      model: 'Users',
+      model: 'users',
       key: 'id'
     }
   },
@@ -38,11 +40,13 @@ const QuizSubmission = sequelize.define('QuizSubmission', {
   },
   correctAnswers: {
     type: DataTypes.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
+    field: 'correct_answers'
   },
   totalQuestions: {
     type: DataTypes.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
+    field: 'total_questions'
   },
   passed: {
     type: DataTypes.BOOLEAN,
@@ -50,18 +54,25 @@ const QuizSubmission = sequelize.define('QuizSubmission', {
   },
   submittedAt: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
+    defaultValue: DataTypes.NOW,
+    field: 'submitted_at'
   },
   timeSpent: {
     type: DataTypes.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
+    field: 'time_spent'
   }
 }, {
+  tableName: 'quiz_submissions',
+  underscored: true,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
-    { fields: ['quizId'] },
-    { fields: ['userId'] },
-    { fields: ['quizId', 'userId'], unique: true },
-    { fields: ['submittedAt'] },
+    { fields: ['quiz_id'] },
+    { fields: ['user_id'] },
+    { fields: ['quiz_id', 'user_id'], unique: true },
+    { fields: ['submitted_at'] },
     { fields: ['passed'] }
   ]
 });

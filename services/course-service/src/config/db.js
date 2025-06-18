@@ -15,7 +15,12 @@ const sequelize = new Sequelize({
   username: process.env.POSTGRES_USER || 'pg',
   password: process.env.POSTGRES_PASSWORD || 'pg',
   database: getDatabaseName(),
-  logging: false
+  logging: false,
+  define: {
+    freezeTableName: true,
+    underscored: true,
+    underscoredAll: true
+  }
 });
 
 const testConnection = async () => {

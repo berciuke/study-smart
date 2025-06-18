@@ -1,35 +1,34 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
-const enrollmentUserIdField = {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Users',
-        key: 'id'
-      }
-    };
-
-const enrollmentCourseIdField = {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Courses',
-        key: 'id'
-      }
-    };
-
 const Enrollment = sequelize.define('Enrollment', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  userId: enrollmentUserIdField,
-  courseId: enrollmentCourseIdField,
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'user_id',
+    references: {
+      model: 'users',
+      key: 'id'
+    }
+  },
+  courseId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'course_id',
+    references: {
+      model: 'courses',
+      key: 'id'
+    }
+  },
   enrolledAt: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
+    defaultValue: DataTypes.NOW,
+    field: 'enrolled_at'
   },
   status: {
     type: DataTypes.ENUM('active', 'completed', 'dropped'),
@@ -38,14 +37,29 @@ const Enrollment = sequelize.define('Enrollment', {
   progress: {
     type: DataTypes.INTEGER, // 0-100 (procent)
     defaultValue: 0
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
   }
 }, {
+  tableName: 'enrollments',
+  underscored: true,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
-    { fields: ['userId'] },
-    { fields: ['courseId'] },
-    { fields: ['userId', 'courseId'], unique: true }, 
+    { fields: ['user_id'] },
+    { fields: ['course_id'] },
+    { fields: ['user_id', 'course_id'], unique: true }, 
     { fields: ['status'] },
-    { fields: ['enrolledAt'] }
+    { fields: ['enrolled_at'] }
   ]
 });
 

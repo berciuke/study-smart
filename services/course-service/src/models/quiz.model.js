@@ -21,40 +21,50 @@ const Quiz = sequelize.define('Quiz', {
   courseId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'course_id',
     references: {
-      model: 'Courses',
+      model: 'courses',
       key: 'id'
     }
   },
   instructorId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'instructor_id',
     references: {
-      model: 'Users',
+      model: 'users',
       key: 'id'
     }
   },
   isActive: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true
+    defaultValue: true,
+    field: 'is_active'
   },
   totalQuestions: {
     type: DataTypes.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
+    field: 'total_questions'
   },
   passingScore: {
     type: DataTypes.INTEGER,
     defaultValue: 60,
+    field: 'passing_score',
     validate: {
       min: 0,
       max: 100
     }
   }
 }, {
+  tableName: 'quizzes',
+  underscored: true,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
-    { fields: ['courseId'] },
-    { fields: ['instructorId'] },
-    { fields: ['isActive'] }
+    { fields: ['course_id'] },
+    { fields: ['instructor_id'] },
+    { fields: ['is_active'] }
   ]
 });
 

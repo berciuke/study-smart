@@ -1,20 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
-const courseInstructorIdField = process.env.NODE_ENV === 'test' 
-  ? {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    }
-  : {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Users', 
-        key: 'id'
-      }
-    };
-
 const Course = sequelize.define('Course', {
   id: {
     type: DataTypes.INTEGER,
@@ -41,7 +27,7 @@ const Course = sequelize.define('Course', {
     defaultValue: 'początkujący'
   },
   duration: {
-    type: DataTypes.INTEGER, // minuty
+    type: DataTypes.INTEGER,
     allowNull: true
   },
   price: {
@@ -50,14 +36,28 @@ const Course = sequelize.define('Course', {
   },
   isActive: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true
+    defaultValue: true,
+    field: 'is_active'
   },
-  instructorId: courseInstructorIdField
+  instructorId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'instructor_id',
+    references: {
+      model: 'users',
+      key: 'id'
+    }
+  }
 }, {
+  tableName: 'courses',
+  underscored: true,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
-    { fields: ['instructorId'] }, 
+    { fields: ['instructor_id'] }, 
     { fields: ['category'] }, 
-    { fields: ['isActive', 'createdAt'] }, 
+    { fields: ['is_active', 'created_at'] }, 
     { fields: ['difficulty'] }, 
     { fields: ['price'] }, 
   ]

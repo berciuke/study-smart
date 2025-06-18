@@ -10,8 +10,9 @@ const Resource = sequelize.define('Resource', {
   courseId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'course_id',
     references: {
-      model: 'Courses',
+      model: 'courses',
       key: 'id'
     }
   },
@@ -33,19 +34,23 @@ const Resource = sequelize.define('Resource', {
   },
   fileName: {
     type: DataTypes.STRING(500),
-    allowNull: true
+    allowNull: true,
+    field: 'file_name'
   },
   filePath: {
     type: DataTypes.STRING(1000),
-    allowNull: true
+    allowNull: true,
+    field: 'file_path'
   },
   fileSize: {
     type: DataTypes.BIGINT,
-    allowNull: true
+    allowNull: true,
+    field: 'file_size'
   },
   mimeType: {
     type: DataTypes.STRING(100),
-    allowNull: true
+    allowNull: true,
+    field: 'mime_type'
   },
   version: {
     type: DataTypes.INTEGER,
@@ -54,30 +59,32 @@ const Resource = sequelize.define('Resource', {
   },
   isActive: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true
+    defaultValue: true,
+    field: 'is_active'
   },
   accessLevel: {
     type: DataTypes.ENUM('public', 'enrolled', 'premium', 'instructor'),
-    defaultValue: 'enrolled'
+    defaultValue: 'enrolled',
+    field: 'access_level'
   },
   streamingConfig: {
     type: DataTypes.JSON,
     allowNull: true,
-    comment: 'Configuration for adaptive streaming (resolutions, bitrates)'
+    field: 'streaming_config'
   },
   metadata: {
     type: DataTypes.JSON,
-    allowNull: true,
-    comment: 'Additional metadata (duration, dimensions, chapters, etc.)'
+    allowNull: true
   },
   chunkSize: {
     type: DataTypes.INTEGER,
     allowNull: true,
-    comment: 'Size of chunks for streaming (in bytes)'
+    field: 'chunk_size'
   },
   uploadProgress: {
     type: DataTypes.INTEGER,
     defaultValue: 100,
+    field: 'upload_progress',
     validate: {
       min: 0,
       max: 100
@@ -85,23 +92,16 @@ const Resource = sequelize.define('Resource', {
   }
 }, {
   tableName: 'resources',
+  underscored: true,
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
-    {
-      fields: ['courseId']
-    },
-    {
-      fields: ['type']
-    },
-    {
-      fields: ['accessLevel']
-    },
-    {
-      fields: ['isActive']
-    },
-    {
-      fields: ['courseId', 'type']
-    }
+    { fields: ['course_id'] },
+    { fields: ['type'] },
+    { fields: ['access_level'] },
+    { fields: ['is_active'] },
+    { fields: ['course_id', 'type'] }
   ]
 });
 

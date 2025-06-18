@@ -10,41 +10,49 @@ const Question = sequelize.define('Question', {
   quizId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'quiz_id',
     references: {
-      model: 'Quizzes',
+      model: 'quizzes',
       key: 'id'
     }
   },
   questionText: {
     type: DataTypes.TEXT,
     allowNull: false,
+    field: 'question_text',
     validate: {
       len: [10, 1000]
     }
   },
   questionType: {
     type: DataTypes.ENUM('single_choice'),
-    defaultValue: 'single_choice'
+    defaultValue: 'single_choice',
+    field: 'question_type'
   },
   optionA: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    field: 'option_a'
   },
   optionB: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    field: 'option_b'
   },
   optionC: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    field: 'option_c'
   },
   optionD: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    field: 'option_d'
   },
   correctAnswer: {
     type: DataTypes.ENUM('A', 'B', 'C', 'D'),
-    allowNull: false
+    allowNull: false,
+    field: 'correct_answer'
   },
   explanation: {
     type: DataTypes.TEXT,
@@ -55,9 +63,14 @@ const Question = sequelize.define('Question', {
     defaultValue: 1
   }
 }, {
+  tableName: 'questions',
+  underscored: true,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
-    { fields: ['quizId'] },
-    { fields: ['quizId', 'order'] }
+    { fields: ['quiz_id'] },
+    { fields: ['quiz_id', 'order'] }
   ]
 });
 

@@ -9,7 +9,7 @@ const courseRoutes = require("./routes/course.routes");
 const resourceRoutes = require("./routes/resource.routes");
 
 // Import all models to ensure proper initialization
-require("./models");
+const models = require("./models");
 
 const app = express();
 
@@ -53,7 +53,13 @@ const start = async () => {
   try {
     await testConnection();
 
-    await sequelize.sync();
+    // Synchronize models in correct order
+    await sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+    
+    // Wait for tables to be created
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    
+    await sequelize.sync({ alter: true });
 
     app.listen(PORT, () => {
       console.log(`[Course Service] działa na porcie ${PORT}`);
