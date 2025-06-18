@@ -19,84 +19,96 @@ const seedUsers = async () => {
         password: 'AdminPass123!',
         firstName: 'Administrator',
         lastName: 'System',
-        role: 'administrator'
+        role: 'administrator',
+        preferredLanguage: 'pl'
       },
       {
         email: 'instruktor@study-smart.pl',
         password: 'InstruktorPass123!',
         firstName: 'Jan',
         lastName: 'Kowalski',
-        role: 'instruktor'
+        role: 'instruktor',
+        preferredLanguage: 'pl'
       },
       {
         email: 'mentor@study-smart.pl',
         password: 'MentorPass123!',
         firstName: 'Anna',
         lastName: 'Nowak',
-        role: 'mentor'
+        role: 'mentor',
+        preferredLanguage: 'pl'
       },
       {
         email: 'student1@study-smart.pl',
         password: 'StudentPass123!',
         firstName: 'Piotr',
         lastName: 'Wiśniewski',
-        role: 'student'
+        role: 'student',
+        preferredLanguage: 'pl'
       },
       {
         email: 'student2@study-smart.pl',
         password: 'StudentPass123!',
         firstName: 'Maria',
         lastName: 'Dąbrowska',
-        role: 'student'
+        role: 'student',
+        preferredLanguage: 'en'
       },
       {
         email: 'student3@study-smart.pl',
         password: 'StudentPass123!',
         firstName: 'Tomasz',
         lastName: 'Lewandowski',
-        role: 'student'
+        role: 'student',
+        preferredLanguage: 'pl'
       },
       {
         email: 'instruktor2@study-smart.pl',
         password: 'InstruktorPass123!',
         firstName: 'Magdalena',
         lastName: 'Zielińska',
-        role: 'instruktor'
+        role: 'instruktor',
+        preferredLanguage: 'en'
       },
       {
         email: 'student4@study-smart.pl',
         password: 'StudentPass123!',
         firstName: 'Michał',
         lastName: 'Szymański',
-        role: 'student'
+        role: 'student',
+        preferredLanguage: 'en'
       },
       {
         email: 'mentor2@study-smart.pl',
         password: 'MentorPass123!',
         firstName: 'Katarzyna',
         lastName: 'Woźniak',
-        role: 'mentor'
+        role: 'mentor',
+        preferredLanguage: 'pl'
       },
       {
         email: 'student5@study-smart.pl',
         password: 'StudentPass123!',
         firstName: 'Paweł',
         lastName: 'Kozłowski',
-        role: 'student'
+        role: 'student',
+        preferredLanguage: 'pl'
       },
       {
         email: 'instruktor3@study-smart.pl',
         password: 'InstruktorPass123!',
         firstName: 'Robert',
         lastName: 'Jankowski',
-        role: 'instruktor'
+        role: 'instruktor',
+        preferredLanguage: 'en'
       },
       {
         email: 'student6@study-smart.pl',
         password: 'StudentPass123!',
         firstName: 'Agnieszka',
         lastName: 'Mazur',
-        role: 'student'
+        role: 'student',
+        preferredLanguage: 'en'
       }
     ];
 

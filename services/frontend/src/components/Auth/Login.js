@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { login } from '../../services/api'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('')
@@ -8,6 +9,7 @@ function Login({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const { t } = useTranslation('auth')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -19,7 +21,7 @@ function Login({ onLoginSuccess }) {
       onLoginSuccess()
       navigate('/dashboard')
     } catch (err) {
-      setError('Błąd logowania. Sprawdź dane.')
+      setError(t('login.error'))
       console.error('Login error:', err)
     } finally {
       setLoading(false)
@@ -32,7 +34,7 @@ function Login({ onLoginSuccess }) {
         <div className="col-md-6">
           <div className="card mt-5">
             <div className="card-body">
-              <h2 className="card-title text-center">Study Smart - Logowanie</h2>
+              <h2 className="card-title text-center">{t('login.title')}</h2>
               
               {error && (
                 <div className="alert alert-danger" role="alert">
@@ -42,7 +44,7 @@ function Login({ onLoginSuccess }) {
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Email</label>
+                  <label htmlFor="email" className="form-label">{t('login.email')}</label>
                   <input
                     type="email"
                     className="form-control"
@@ -54,7 +56,7 @@ function Login({ onLoginSuccess }) {
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Hasło</label>
+                  <label htmlFor="password" className="form-label">{t('login.password')}</label>
                   <input
                     type="password"
                     className="form-control"
@@ -70,17 +72,17 @@ function Login({ onLoginSuccess }) {
                   className="btn btn-primary w-100"
                   disabled={loading}
                 >
-                  {loading ? 'Logowanie...' : 'Zaloguj'}
+                  {loading ? t('login.loading') : t('login.submit')}
                 </button>
               </form>
 
               <div className="text-center mt-3">
-                <span>Nie masz konta? </span>
+                <span>{t('login.noAccount')} </span>
                 <button 
                   className="btn btn-link p-0"
                   onClick={() => navigate('/register')}
                 >
-                  Zarejestruj się
+                  {t('login.register')}
                 </button>
               </div>
             </div>

@@ -1,0 +1,24 @@
+{
+  "buttons": {
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "submit": "Wyślij",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "previous": "Poprzedni",
+    "logout": "Wyloguj"
+  },
+  "messages": {
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "success": "Operacja zakończona pomyślnie",
+    "noData": "Brak danych do wyświetlenia"
+  },
+  "form": {
+    "required": "To pole jest wymagane",
+    "invalidEmail": "Nieprawidłowy adres e-mail",
+    "passwordTooShort": "Hasło musi mieć co najmniej 6 znaków"
+  }
+} 

@@ -1,0 +1,24 @@
+{
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "submit": "Submit",
+      "back": "Back",
+      "next": "Next",
+      "previous": "Previous",
+      "logout": "Logout"
+    },
+    "messages": {
+      "loading": "Loading...",
+      "error": "An error occurred",
+      "success": "Operation successful",
+      "noData": "No data to display"
+    },
+    "form": {
+      "required": "This field is required",
+      "invalidEmail": "Invalid email address",
+      "passwordTooShort": "Password must be at least 6 characters long"
+    }
+} 

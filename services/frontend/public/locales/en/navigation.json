@@ -1,0 +1,10 @@
+{
+    "dashboard": "Dashboard",
+    "courses": "Courses",
+    "quizzes": "Quizzes",
+    "progress": "Progress",
+    "welcome": "Welcome, {{name}}!",
+    "user": "User",
+    "login": "Login",
+    "register": "Register"
+} 

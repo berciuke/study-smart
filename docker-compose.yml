@@ -76,6 +76,20 @@ services:
       - COURSE_SERVICE_URL=http://course-service:3002
       - JWT_SECRET=najlepiej_dlugi_i_losowy
 
+  notification-service:
+    build: ./services/notification-service
+    ports:
+      - "3004:3004"
+    depends_on:
+      - mongodb
+      - user-service
+    environment:
+      - NODE_ENV=development
+      - NOTIFICATION_SERVICE_PORT=3004
+      - MONGODB_URI=mongodb://mongodb:27017/study_smart_notifications
+      - USER_SERVICE_URL=http://user-service:3001
+      - JWT_SECRET=najlepiej_dlugi_i_losowy
+
   frontend:
     build:
       context: ./services/frontend
@@ -83,16 +97,19 @@ services:
         - REACT_APP_USER_SERVICE_URL=http://localhost:3001
         - REACT_APP_COURSE_SERVICE_URL=http://localhost:3002
         - REACT_APP_PROGRESS_SERVICE_URL=http://localhost:3003
+        - REACT_APP_NOTIFICATION_SERVICE_URL=http://localhost:3004
     ports:
       - "3000:3000"
     depends_on:
       - user-service
       - course-service
       - progress-service
+      - notification-service
     environment:
       - REACT_APP_USER_SERVICE_URL=http://localhost:3001
       - REACT_APP_COURSE_SERVICE_URL=http://localhost:3002
       - REACT_APP_PROGRESS_SERVICE_URL=http://localhost:3003
+      - REACT_APP_NOTIFICATION_SERVICE_URL=http://localhost:3004
 
 volumes:
   postgres_data:
