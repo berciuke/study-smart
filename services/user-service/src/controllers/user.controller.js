@@ -1,31 +1,41 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
+const bcrypt = require('bcryptjs');
+const { prisma } = require('../config/db');
 
 // Rejestracja użytkownika
 exports.register = async (req, res) => {
   try {
     const { email, password, firstName, lastName, role } = req.body;
 
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ error: 'Użytkownik z tym emailem już istnieje' });
     }
 
-    const user = await User.create({
-      email,
-      password,
-      firstName,
-      lastName,
-      role: role || 'student'
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        firstName,
+        lastName,
+        role: role || 'student'
+      }
     });
 
     // Nie zwracamy hasła
-    const userData = user.toJSON();
-    delete userData.password;
+    const { password: _, ...userWithoutPassword } = user;
 
-    res.status(201).json(userData);
+    res.status(201).json(userWithoutPassword);
   } catch (error) {
     console.error('[register]', error);
+    
+    // Handle Prisma specific errors
+    if (error.code === 'P2002') {
+      return res.status(400).json({ error: 'Użytkownik z tym emailem już istnieje' });
+    }
+    
     res.status(500).json({ error: 'Błąd serwera', details: error.message });
   }
 };
@@ -35,12 +45,12 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(401).json({ error: 'Nieprawidłowy email lub hasło' });
     }
 
-    const isValidPassword = await user.comparePassword(password);
+    const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       return res.status(401).json({ error: 'Nieprawidłowy email lub hasło' });
     }
@@ -65,15 +75,17 @@ exports.login = async (req, res) => {
 // Pobranie profilu użytkownika
 exports.getProfile = async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id, {
-      attributes: { exclude: ['password'] }
+    const user = await prisma.user.findUnique({ 
+      where: { id: req.user.id }
     });
 
     if (!user) {
       return res.status(404).json({ error: 'Użytkownik nie został znaleziony' });
     }
 
-    res.json(user);
+    // Zwracamy bez hasła
+    const { password, ...userData } = user;
+    res.json(userData);
   } catch (error) {
     console.error('[getProfile]', error);
     res.status(500).json({ error: 'Błąd serwera', details: error.message });
@@ -84,20 +96,22 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const { firstName, lastName } = req.body;
-    const user = await User.findByPk(req.user.id);
+    
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.id },
+      data: { firstName, lastName }
+    });
 
-    if (!user) {
-      return res.status(404).json({ error: 'Użytkownik nie został znaleziony' });
-    }
-
-    await user.update({ firstName, lastName });
-
-    const userData = user.toJSON();
-    delete userData.password;
-
+    const { password, ...userData } = updatedUser;
     res.json(userData);
   } catch (error) {
     console.error('[updateProfile]', error);
+    
+    // Handle Prisma record not found
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Użytkownik nie został znaleziony' });
+    }
+    
     res.status(500).json({ error: 'Błąd serwera', details: error.message });
   }
 };
@@ -105,8 +119,16 @@ exports.updateProfile = async (req, res) => {
 // GET wszyscy użytkownicy, admin only
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({
-      attributes: { exclude: ['password'] }
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        firstName: true,
+        lastName: true,
+        createdAt: true,
+        updatedAt: true
+      }
     });
     res.json(users);
   } catch (error) {

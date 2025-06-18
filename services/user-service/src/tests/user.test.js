@@ -1,7 +1,7 @@
 const request = require('supertest');
 const express = require('express');
 const userRoutes = require('../routes/user.routes');
-const User = require('../models/user.model');
+const { prisma } = require('../config/db');
 require('./setup');
 
 const app = express();
@@ -24,7 +24,7 @@ describe('User Service API', () => {
         role: 'student'
       });
     
-    studentUser = await User.findOne({ where: { email: 'student@example.com' } });
+    studentUser = await prisma.user.findUnique({ where: { email: 'student@example.com' } });
     if (studentUser) global.trackCreatedUser(studentUser);
 
     const adminRes = await request(app)
@@ -37,8 +37,7 @@ describe('User Service API', () => {
         role: 'administrator'
       });
     
-
-    adminUser = await User.findOne({ where: { email: 'admin@example.com' } });
+    adminUser = await prisma.user.findUnique({ where: { email: 'admin@example.com' } });
     if (adminUser) global.trackCreatedUser(adminUser);
 
     const studentLoginRes = await request(app)

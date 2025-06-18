@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "jest"
+    "test": "NODE_ENV=test jest",
+    "postinstall": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "seed": "node src/seed/seed-users.js",
+    "studio": "prisma studio"
   },
   "dependencies": {
     "express": "^4.21.2",
@@ -16,8 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "bcryptjs": "^2.4.3",
     "joi": "^17.13.3",
-    "pg": "^8.16.0",
-    "sequelize": "^6.37.7",
+    "prisma": "^6.4.1",
+    "@prisma/client": "^6.4.1",
     "cors": "^2.8.5"
   },
   "devDependencies": {
@@ -27,5 +31,8 @@
   },
   "jest": {
     "setupFilesAfterEnv": ["./src/tests/setup.js"]
+  },
+  "prisma": {
+    "seed": "node src/seed/seed-users.js"
   }
 } 

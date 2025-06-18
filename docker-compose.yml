@@ -9,7 +9,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  
+
   pgadmin:
     image: dpage/pgadmin4:latest
     ports:
@@ -36,6 +36,7 @@ services:
     environment:
       - NODE_ENV=development
       - USER_SERVICE_PORT=3001
+      - DATABASE_URL=postgresql://pg:pg@postgres:5432/study_smart
       - POSTGRES_HOST=postgres
       - POSTGRES_USER=pg
       - POSTGRES_PASSWORD=pg
@@ -75,6 +76,24 @@ services:
       - COURSE_SERVICE_URL=http://course-service:3002
       - JWT_SECRET=najlepiej_dlugi_i_losowy
 
+  frontend:
+    build:
+      context: ./services/frontend
+      args:
+        - REACT_APP_USER_SERVICE_URL=http://localhost:3001
+        - REACT_APP_COURSE_SERVICE_URL=http://localhost:3002
+        - REACT_APP_PROGRESS_SERVICE_URL=http://localhost:3003
+    ports:
+      - "3000:3000"
+    depends_on:
+      - user-service
+      - course-service
+      - progress-service
+    environment:
+      - REACT_APP_USER_SERVICE_URL=http://localhost:3001
+      - REACT_APP_COURSE_SERVICE_URL=http://localhost:3002
+      - REACT_APP_PROGRESS_SERVICE_URL=http://localhost:3003
+
 volumes:
   postgres_data:
-  mongodb_data: 
+  mongodb_data:

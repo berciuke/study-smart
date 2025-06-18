@@ -8,7 +8,7 @@ const updateProgressSchema = Joi.object({
     .messages({
       'number.base': 'ID kursu musi być liczbą',
       'number.integer': 'ID kursu musi być liczbą całkowitą',
-      'number.positive': 'ID kursu musi być liczbą dodatnią',
+      'number.positive': 'ID kursu musi być większe od 0',
       'any.required': 'ID kursu jest wymagane'
     }),
   
@@ -19,19 +19,17 @@ const updateProgressSchema = Joi.object({
     .messages({
       'number.base': 'ID lekcji musi być liczbą',
       'number.integer': 'ID lekcji musi być liczbą całkowitą',
-      'number.positive': 'ID lekcji musi być liczbą dodatnią'
+      'number.positive': 'ID lekcji musi być większe od 0'
     }),
   
   timeSpent: Joi.number()
-    .integer()
-    .min(1)
-    .max(1440) // max 24h
+    .min(0)
+    .max(1440) // max 24h w minutach
     .optional()
     .messages({
       'number.base': 'Czas nauki musi być liczbą',
-      'number.integer': 'Czas nauki musi być liczbą całkowitą',
-      'number.min': 'Czas nauki musi być minimum {#limit} minuty',
-      'number.max': 'Czas nauki może być maksymalnie {#limit} minut (24h)'
+      'number.min': 'Czas nauki nie może być ujemny',
+      'number.max': 'Czas nauki nie może przekraczać 24 godzin'
     }),
   
   longitude: Joi.number()
@@ -54,12 +52,14 @@ const updateProgressSchema = Joi.object({
       'number.max': 'Szerokość geograficzna musi być między -90 a 90'
     })
 })
+.with('longitude', 'latitude')
+.with('latitude', 'longitude')
 .options({
   stripUnknown: true,
   abortEarly: false
 })
 .messages({
-  'object.unknown': 'Pole "{#label}" nie jest dozwolone'
+  'object.with': 'Longitude i latitude muszą być podane razem'
 });
 
 const progressQuerySchema = Joi.object({

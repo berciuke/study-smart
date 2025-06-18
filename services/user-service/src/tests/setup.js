@@ -1,5 +1,4 @@
-const { sequelize } = require('../config/db');
-const User = require('../models/user.model');
+const { prisma } = require('../config/db');
 
 let createdUserIds = [];
 
@@ -8,17 +7,33 @@ global.trackCreatedUser = (user) => {
 };
 
 beforeAll(async () => {
-  await sequelize.sync();
+  // Ensure database connection is established
+  try {
+    await prisma.$connect();
+    console.log('✅ Połączono z bazą danych (testy)');
+  } catch (error) {
+    console.error('❌ Błąd połączenia z bazą danych:', error);
+    throw error;
+  }
 });
 
 afterAll(async () => {
-  // Usuwam testowe rekordy
-  if (createdUserIds.length > 0) {
-    await User.destroy({
-      where: {
-        id: createdUserIds
-      }
-    });
+  try {
+    // Usuwam testowe rekordy
+    if (createdUserIds.length > 0) {
+      await prisma.user.deleteMany({
+        where: {
+          id: {
+            in: createdUserIds
+          }
+        }
+      });
+      console.log(`🧹 Usunięto ${createdUserIds.length} testowych użytkowników`);
+    }
+  } catch (error) {
+    console.error('❌ Błąd czyszczenia testów:', error);
+  } finally {
+    await prisma.$disconnect();
+    console.log('✅ Rozłączono z bazą danych (testy)');
   }
-  await sequelize.close();
 }); 
